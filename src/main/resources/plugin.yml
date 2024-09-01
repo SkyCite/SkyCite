@@ -1,0 +1,16 @@
+name: SkyCite
+version: '1.0-SNAPSHOT'
+main: fr.tetemh.skycite.SkyCite
+api-version: '1.21'
+authors: [ tetemh ]
+commands:
+    init:
+        description: Initialise le plugin de cité
+        permission: skycite.init
+        aliases: i
+        permission-message: Non Non Non tu essaies de faire quoi là !
+    money:
+        description: Voir votre money
+        permission: skycite.money
+        permission-message: Non Non Non tu essaies de faire quoi là !
+
