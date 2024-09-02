@@ -6,6 +6,7 @@ authors: [ tetemh ]
 libraries:
     - com.zaxxer:HikariCP:4.0.3
     - org.mariadb.jdbc:mariadb-java-client:3.0.8
+depend: [Citizens]
 commands:
     init:
         description: Initialise le plugin de cité
@@ -15,5 +16,9 @@ commands:
     money:
         description: Voir votre money
         permission: skycite.money
+        permission-message: Non Non Non tu essaies de faire quoi là !
+    debug:
+        description: DEBUG
+        permission: skycite.debug
         permission-message: Non Non Non tu essaies de faire quoi là !
 

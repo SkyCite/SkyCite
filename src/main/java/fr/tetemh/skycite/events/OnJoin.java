@@ -26,6 +26,12 @@ public class OnJoin implements Listener {
         } else {
             this.getPlugin().getPlayersManager().getPlayers().put(player.getUniqueId(), new CPlayer(player));
         }
+
+        // Spawn Bank
+//        this.getPlugin().getBank().spawn(player);
+//        this.getPlugin().getShopsManager().getShops().values().forEach(shop -> {
+//            shop.spawn(player);
+//        });
     }
 
 }

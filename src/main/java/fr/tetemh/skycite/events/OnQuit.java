@@ -20,6 +20,12 @@ public class OnQuit implements Listener {
     void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         this.getPlugin().getPlayersManager().getPlayers().get(player.getUniqueId()).setOnline(false);
+
+
+        this.getPlugin().getBank().kill();
+//        this.getPlugin().getShopsManager().getShops().values().forEach(shop -> {
+//            shop.kill(player);
+//        });
     }
 
 }

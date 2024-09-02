@@ -25,6 +25,7 @@ public class BoardsRunnable extends BukkitRunnable {
     }
 
     private void updateLine(FastBoard board, CPlayer cPlayer) {
+        board.updateTitle(Component.text("SkyCite"));
         board.updateLines(
                 Component.text(""),
                 Component.text("Money : " + cPlayer.getMoney()),

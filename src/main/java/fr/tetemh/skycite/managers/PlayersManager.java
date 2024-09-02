@@ -18,12 +18,7 @@ public class PlayersManager {
         this.plugin = plugin;
 
         this.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
-            if(this.getPlayers().containsKey(player.getUniqueId())) {
-                CPlayer cPlayer = this.getPlayers().get(player.getUniqueId());
-                cPlayer.setOnline(true);
-            } else {
-                this.getPlayers().put(player.getUniqueId(), new CPlayer(player));
-            }
+            this.getPlayers().put(player.getUniqueId(), new CPlayer(player));
         });
     }
 

@@ -1,31 +1,24 @@
 package fr.tetemh.skycite.custom.customclass;
 
-import de.oliver.fancynpcs.api.FancyNpcsPlugin;
-import de.oliver.fancynpcs.api.Npc;
-import de.oliver.fancynpcs.api.NpcAttribute;
-import de.oliver.fancynpcs.api.NpcData;
-import de.oliver.fancynpcs.api.utils.SkinFetcher;
 import fr.tetemh.fastinv.FastInv;
 import fr.tetemh.fastinv.ItemBuilder;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.managers.InventoryManager;
 import fr.tetemh.skycite.utils.Utils;
 import lombok.Data;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -34,7 +27,7 @@ public class Shop {
 
     private SkyCite plugin;
 
-    private Npc npc;
+    private NPC npc;
     private String name;
     private String constantName;
     private Location location;
@@ -53,25 +46,12 @@ public class Shop {
         this.setLocation(new Location(Bukkit.getWorld("world"), x, y, z, yaw, pitch));
     }
 
-    public void spawn() {
-
-        NpcData data = new NpcData(this.getConstantName(), UUID.fromString("56699713a9ae470fbb494d78dd9574cc"), this.getLocation());
-        SkinFetcher skin = new SkinFetcher("https://s.namemc.com/i/ac3864ce20b1470a.png");
-        data.setSkin(skin);
-        data.setDisplayName(this.getName());
-
-
-        this.setNpc(FancyNpcsPlugin.get().getNpcAdapter().apply(data));
-        FancyNpcsPlugin.get().getNpcManager().registerNpc(this.getNpc());
-        this.getNpc().create();
-        this.getNpc().getData().setOnClick(player -> {
-            this.getInventoryManager().first().open(player);
-        });
-        this.getNpc().spawnForAll();
+    public void spawn(Player player) {
+        this.setNpc(CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, this.getName()));
     }
 
-    public void kill() {
-        this.getNpc().removeForAll();
+    public void kill(Player player) {
+        this.getNpc().despawn();
     }
 
     public void genInventory() {

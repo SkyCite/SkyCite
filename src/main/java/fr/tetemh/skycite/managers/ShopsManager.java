@@ -17,7 +17,7 @@ public class ShopsManager {
     private SkyCite plugin;
     private HashMap<String, Shop> shops = new HashMap<>();
 
-    public ShopsManager(SkyCite skyCite) {
+    public ShopsManager(SkyCite plugin) {
         this.setPlugin(plugin);
     }
 
@@ -34,10 +34,7 @@ public class ShopsManager {
         this.getShops().put(fleuriste.getConstantName(), fleuriste);
 
         // Boucle Spawn Shop
-        this.getShops().values().forEach(shop -> {
-            shop.genInventory();
-            shop.spawn();
-        });
+        this.getShops().values().forEach(Shop::genInventory);
     }
 
     public void disable() {
@@ -45,7 +42,9 @@ public class ShopsManager {
 //            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName() + ".name", shop.getName());
 //            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName() + ".constant_name", shop.getConstantName());
 //            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName() + ".location", shop.getLocation());
+            shop.getNpc().despawn();
             this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName(), shop);
+            this.getPlugin().saveConfig();
         });
     }
 
