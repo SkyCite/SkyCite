@@ -1,5 +1,10 @@
 package fr.tetemh.skycite.custom.customclass;
 
+import de.oliver.fancynpcs.api.FancyNpcsPlugin;
+import de.oliver.fancynpcs.api.Npc;
+import de.oliver.fancynpcs.api.NpcAttribute;
+import de.oliver.fancynpcs.api.NpcData;
+import de.oliver.fancynpcs.api.utils.SkinFetcher;
 import fr.tetemh.fastinv.FastInv;
 import fr.tetemh.fastinv.ItemBuilder;
 import fr.tetemh.skycite.SkyCite;
@@ -20,19 +25,25 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Data
 public class Shop {
-    private Villager villagerEntity;
+
+    private SkyCite plugin;
+
+    private Npc npc;
     private String name;
     private String constantName;
     private Location location;
     private List<Trade> trades = new ArrayList<>();
     private InventoryManager inventoryManager;
 
-    public Shop(String shopName) {
+    public Shop(SkyCite plugin, String shopName) {
+        this.setPlugin(plugin);
+
         this.setName(shopName);
         this.setConstantName(Utils.normalizeString(shopName));
         this.setInventoryManager(new InventoryManager());
@@ -43,23 +54,24 @@ public class Shop {
     }
 
     public void spawn() {
-        this.setVillagerEntity((Villager) this.getLocation().getWorld().spawnEntity(this.getLocation(), EntityType.VILLAGER));
-        this.getVillagerEntity().customName(Component.text(this.getName()));
-        this.getVillagerEntity().setCustomNameVisible(true);
-        this.getVillagerEntity().setAI(false);
-        this.getVillagerEntity().setInvulnerable(true);
-        this.getVillagerEntity().setGravity(true);
 
-        // Data
-        NamespacedKey key_type = new NamespacedKey(SkyCite.getInstance(), "npc_type");
-        this.getVillagerEntity().getPersistentDataContainer().set(key_type, PersistentDataType.STRING, "shop");
+        NpcData data = new NpcData(this.getConstantName(), UUID.fromString("56699713a9ae470fbb494d78dd9574cc"), this.getLocation());
+        SkinFetcher skin = new SkinFetcher("https://s.namemc.com/i/ac3864ce20b1470a.png");
+        data.setSkin(skin);
+        data.setDisplayName(this.getName());
 
-        NamespacedKey key_name = new NamespacedKey(SkyCite.getInstance(), "npc_name");
-        this.getVillagerEntity().getPersistentDataContainer().set(key_name, PersistentDataType.STRING, this.getConstantName());
+
+        this.setNpc(FancyNpcsPlugin.get().getNpcAdapter().apply(data));
+        FancyNpcsPlugin.get().getNpcManager().registerNpc(this.getNpc());
+        this.getNpc().create();
+        this.getNpc().getData().setOnClick(player -> {
+            this.getInventoryManager().first().open(player);
+        });
+        this.getNpc().spawnForAll();
     }
 
     public void kill() {
-        this.getVillagerEntity().remove();
+        this.getNpc().removeForAll();
     }
 
     public void genInventory() {
@@ -103,6 +115,12 @@ public class Shop {
             three.addAndGet(9);
 
             nbItem.incrementAndGet();
+        });
+    }
+
+    public void genTrades() {
+        this.getPlugin().getTradesConfig().getList("npcs.shops").forEach(shop -> {
+
         });
     }
 

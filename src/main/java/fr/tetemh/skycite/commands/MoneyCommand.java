@@ -10,9 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class MoneyCommand implements CommandExecutor {
 
-    @Getter
     private final SkyCite plugin;
 
     public MoneyCommand(SkyCite plugin) {
