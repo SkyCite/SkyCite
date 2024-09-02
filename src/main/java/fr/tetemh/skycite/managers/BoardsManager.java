@@ -1,6 +1,6 @@
 package fr.tetemh.skycite.managers;
 
-import fr.tetemh.fastboard.FastBoard;
+import fr.mrmicky.fastboard.adventure.FastBoard;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.runnable.BoardsRunnable;
 import lombok.Data;

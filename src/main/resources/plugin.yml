@@ -3,6 +3,9 @@ version: '1.0-SNAPSHOT'
 main: fr.tetemh.skycite.SkyCite
 api-version: '1.21'
 authors: [ tetemh ]
+libraries:
+    - com.zaxxer:HikariCP:4.0.3
+    - org.mariadb.jdbc:mariadb-java-client:3.0.8
 commands:
     init:
         description: Initialise le plugin de cité
