@@ -1,7 +1,6 @@
 package fr.tetemh.skycite;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
-import fr.tetemh.fastboard.FastBoard;
 import fr.tetemh.fastinv.FastInvManager;
 import fr.tetemh.skycite.commands.InitCommand;
 import fr.tetemh.skycite.commands.MoneyCommand;
