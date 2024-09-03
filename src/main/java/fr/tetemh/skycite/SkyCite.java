@@ -1,5 +1,6 @@
 package fr.tetemh.skycite;
 
+import fr.tetemh.events.Events;
 import fr.tetemh.fastinv.FastInvManager;
 import fr.tetemh.skycite.commands.DebugCommand;
 import fr.tetemh.skycite.commands.InitCommand;
@@ -15,6 +16,8 @@ import fr.tetemh.skycite.managers.ShopsManager;
 import lombok.Getter;
 import lombok.Setter;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.MemoryNPCDataStore;
+import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +53,9 @@ public final class SkyCite extends JavaPlugin {
     @Getter @Setter
     private Bank bank;
 
+    @Getter @Setter
+    private Events events;
+
     // Config File
     @Getter @Setter
     private YamlConfiguration npcConfig;
@@ -62,11 +68,11 @@ public final class SkyCite extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Arrays.stream(enableText).forEach(l -> this.getLogger().info(l));
 
         SkyCite.instance = this;
 
         // Text Plugin ON
-        Arrays.stream(enableText).forEach(l -> this.getLogger().info(l));
 
         // Config Files
         try {
@@ -112,6 +118,9 @@ public final class SkyCite extends JavaPlugin {
         this.getShopsManager().init();
         // Spawn Bank
         this.getBank().spawn();
+
+        this.setEvents(new Events(this));
+        this.getEvents().onEnable();
     }
 
     @Override
@@ -121,6 +130,9 @@ public final class SkyCite extends JavaPlugin {
 
         //Kill All NPC
         this.getBank().getNpc().destroy();
+
+
+        this.getEvents().onDisable();
 
         Arrays.stream(disableText).forEach(l -> this.getLogger().info(l));
     }
