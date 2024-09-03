@@ -7,6 +7,7 @@ import fr.tetemh.skycite.commands.InitCommand;
 import fr.tetemh.skycite.commands.MoneyCommand;
 import fr.tetemh.skycite.custom.customEvent.callCustomEvent.OnPlayerInteractEntityEvent;
 import fr.tetemh.skycite.custom.customclass.Bank;
+import fr.tetemh.skycite.events.OnCitizenStartEvent;
 import fr.tetemh.skycite.events.OnJoin;
 import fr.tetemh.skycite.events.OnQuit;
 import fr.tetemh.skycite.events.shop.NPCClientEvent;
@@ -105,6 +106,7 @@ public final class SkyCite extends JavaPlugin {
         // Calling Basic Event
         this.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new OnQuit(this), this);
+        this.getServer().getPluginManager().registerEvents(new OnCitizenStartEvent(this), this);
 
         // Event for Calling Custom Event
         this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEntityEvent(this), this);
@@ -116,8 +118,6 @@ public final class SkyCite extends JavaPlugin {
 
         // Init Shop More simple for debug
         this.getShopsManager().init();
-        // Spawn Bank
-        this.getBank().spawn();
 
         this.setEvents(new Events(this));
         this.getEvents().onEnable();

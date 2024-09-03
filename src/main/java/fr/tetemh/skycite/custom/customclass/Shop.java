@@ -8,14 +8,18 @@ import fr.tetemh.skycite.utils.Utils;
 import lombok.Data;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.trait.SkinTrait;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +50,47 @@ public class Shop {
         this.setLocation(new Location(Bukkit.getWorld("world"), x, y, z, yaw, pitch));
     }
 
-    public void spawn(Player player) {
+    /* DEBUT GESTION NPC */
+    public void setNpc() {
+        // Verif si le npc existe pas deja
+        for (NPC npc : CitizensAPI.getNPCRegistry()) {
+            if (npc.getName().equals(this.getName())) {
+                this.setNpc(npc);
+                return;
+            }
+        }
+
+        // Créer un nouveau NPC
         this.setNpc(CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, this.getName()));
+    }
+
+    /**
+     * Permet de faire spawn le NPC pour tous les joueurs
+     */
+    public void spawn() {
+        //Citizen Conf
+        this.getNpc().setFlyable(true);
+        this.getNpc().setUseMinecraftAI(false);
+        this.getNpc().setProtected(true);
+
+        SkinTrait skinTrait = this.getNpc().getOrAddTrait(SkinTrait.class);
+        skinTrait.setSkinName("tetemhjpd");
+        this.getNpc().addTrait((Trait) skinTrait);
+
+        // Spawn Entity
+        this.getNpc().spawn(this.getLocation());
+
+        // Param on Entity
+        this.getNpc().getEntity().getPersistentDataContainer().set(new NamespacedKey(this.plugin, "npc_type"), PersistentDataType.STRING, "shop");
+        this.getNpc().getEntity().getPersistentDataContainer().set(new NamespacedKey(this.plugin, "npc_name"), PersistentDataType.STRING, this.getConstantName());
+        this.getNpc().getEntity().setGravity(false);
     }
 
     public void kill(Player player) {
         this.getNpc().despawn();
     }
+
+    /* FIN GESTION NPC */
 
     public void genInventory() {
 

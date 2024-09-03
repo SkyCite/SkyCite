@@ -21,6 +21,7 @@ public class BoardsRunnable extends BukkitRunnable {
         this.getPlugin().getBoardsManager().getBoards().forEach((uuid, board) -> {
             CPlayer cPlayer = this.getPlugin().getPlayersManager().getPlayers().get(uuid);
             this.updateLine(board, cPlayer);
+
         });
     }
 

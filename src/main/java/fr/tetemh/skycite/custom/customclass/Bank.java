@@ -28,15 +28,21 @@ public class Bank {
 
     public Bank (SkyCite plugin) {
         this.plugin = plugin;
-
-        // this.name = this.getPlugin().getNpcConfig().getString("npcs.bank.name");
-        // this.location = this.getPlugin().getNpcConfig().getLocation("npcs.bank.location");
-
         this.name = "Banquier";
         this.location = new Location(Bukkit.getWorld("world"), 0, 100, 5);
 
         this.genInventory();
-        CitizensAPI.getNPCRegistry().get
+    }
+
+    public void setNPC() {
+        for (NPC npc : CitizensAPI.getNPCRegistry()) {
+            if (npc.getName().equals(this.getName())) {
+                this.setNpc(npc);
+                return;
+            }
+        }
+
+        // Créer un nouveau NPC
         this.setNpc(CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, this.getName()));
     }
 
@@ -47,8 +53,8 @@ public class Bank {
         this.getNpc().setUseMinecraftAI(false);
         this.getNpc().setProtected(true);
 
-        SkinTrait skinTrait = npc.getOrAddTrait(SkinTrait.class);
-        skinTrait.setSkinName("NomDuJoueurAvecCeSkin");
+        SkinTrait skinTrait = this.getNpc().getOrAddTrait(SkinTrait.class);
+        skinTrait.setSkinName("tetemhjpd");
         this.getNpc().addTrait((Trait) skinTrait);
 
         // Spawn Entity
@@ -59,10 +65,6 @@ public class Bank {
         this.getNpc().getEntity().setGravity(false);
     }
 
-    public void kill() {
-        this.getNpc().despawn();
-    }
-
     private void genInventory() {
         this.setInventory(new BankGui(this.getPlugin(), this));
     }
@@ -71,6 +73,6 @@ public class Bank {
         this.getPlugin().getNpcConfig().set("npcs.bank.name", this.getName());
         this.getPlugin().getNpcConfig().set("npcs.bank.location", this.getLocation());
 
-        this.kill();
+        this.getNpc().destroy();
     }
 }

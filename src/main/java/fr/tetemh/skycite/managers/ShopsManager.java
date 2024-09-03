@@ -26,14 +26,18 @@ public class ShopsManager {
         /*  SHOP MINEUR */
         Shop mineur = new Shop(this.getPlugin(), "Mineur");
         mineur.setLocation(0, 100, 0, 0, 0);
+        mineur.setNpc();
+        mineur.spawn();
         this.getShops().put(mineur.getConstantName(), mineur);
 
         /*  SHOP FLEURISTE */
         Shop fleuriste = new Shop(this.getPlugin(), "Fleuriste");
         fleuriste.setLocation(2, 100, 0, 0, 0);
+        fleuriste.setNpc();
+        fleuriste.spawn();
         this.getShops().put(fleuriste.getConstantName(), fleuriste);
 
-        // Boucle Spawn Shop
+        // Genere les invManager des shops pour le multi page
         this.getShops().values().forEach(Shop::genInventory);
     }
 
