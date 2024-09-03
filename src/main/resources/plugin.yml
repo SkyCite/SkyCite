@@ -21,4 +21,8 @@ commands:
         description: DEBUG
         permission: skycite.debug
         permission-message: Non Non Non tu essaies de faire quoi là !
+    reloadnpc:
+        description: Reload Citizen NPC
+        permission: skycite.reloadnpc
+        permission-message: Non Non Non tu essaies de faire quoi là !
 

@@ -5,20 +5,17 @@ import fr.tetemh.fastinv.FastInvManager;
 import fr.tetemh.skycite.commands.DebugCommand;
 import fr.tetemh.skycite.commands.InitCommand;
 import fr.tetemh.skycite.commands.MoneyCommand;
-import fr.tetemh.skycite.custom.customEvent.callCustomEvent.OnPlayerInteractEntityEvent;
+import fr.tetemh.skycite.commands.ReloadNPCCommand;
 import fr.tetemh.skycite.custom.customclass.Bank;
 import fr.tetemh.skycite.events.OnCitizenStartEvent;
 import fr.tetemh.skycite.events.OnJoin;
 import fr.tetemh.skycite.events.OnQuit;
-import fr.tetemh.skycite.events.shop.NPCClientEvent;
+import fr.tetemh.skycite.events.shop.PlayerClickOnNPCEvent;
 import fr.tetemh.skycite.managers.BoardsManager;
 import fr.tetemh.skycite.managers.PlayersManager;
 import fr.tetemh.skycite.managers.ShopsManager;
 import lombok.Getter;
 import lombok.Setter;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.MemoryNPCDataStore;
-import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -100,6 +97,7 @@ public final class SkyCite extends JavaPlugin {
         // Define Command
         this.getCommand("init").setExecutor(new InitCommand(this));
         this.getCommand("money").setExecutor(new MoneyCommand(this));
+        this.getCommand("reloadnpc").setExecutor(new ReloadNPCCommand(this));
         this.getCommand("debug").setExecutor(new DebugCommand());
 
 
@@ -109,10 +107,10 @@ public final class SkyCite extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OnCitizenStartEvent(this), this);
 
         // Event for Calling Custom Event
-        this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEntityEvent(this), this);
+//        this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEntityEvent(this), this);
 
         // Calling Custom Event
-        this.getServer().getPluginManager().registerEvents(new NPCClientEvent(this), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerClickOnNPCEvent(this), this);
 
 
 
@@ -125,13 +123,6 @@ public final class SkyCite extends JavaPlugin {
 
     @Override
     public void onDisable() {
-//        this.getShopsManager().disable();
-//        this.getBank().disable();
-
-        //Kill All NPC
-        this.getBank().getNpc().destroy();
-
-
         this.getEvents().onDisable();
 
         Arrays.stream(disableText).forEach(l -> this.getLogger().info(l));

@@ -28,6 +28,11 @@ public class ShopsManager {
         mineur.setLocation(0, 100, 0, 0, 0);
         mineur.setNpc();
         mineur.spawn();
+
+        mineur.getTrades().add(new Trade(Material.STONE, 1, 20));
+        mineur.getTrades().add(new Trade(Material.STONE, 1, 20));
+        mineur.getTrades().add(new Trade(Material.STONE, 1, 20));
+
         this.getShops().put(mineur.getConstantName(), mineur);
 
         /*  SHOP FLEURISTE */
@@ -35,6 +40,11 @@ public class ShopsManager {
         fleuriste.setLocation(2, 100, 0, 0, 0);
         fleuriste.setNpc();
         fleuriste.spawn();
+
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+
         this.getShops().put(fleuriste.getConstantName(), fleuriste);
 
         // Genere les invManager des shops pour le multi page

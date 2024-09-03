@@ -23,6 +23,6 @@ public class OnCitizenStartEvent implements Listener {
 
         // Spawn Bank
         this.getPlugin().getBank().setNPC();
-        this.getPlugin().getBank().spawn();
+        if(!this.getPlugin().getBank().getNpc().isSpawned()) this.getPlugin().getBank().spawn();
     }
 }
