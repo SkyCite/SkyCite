@@ -17,4 +17,6 @@ public class Event {
         this.setStatus(EventStatus.STOP);
     }
 
+    public void disable() {
+    }
 }

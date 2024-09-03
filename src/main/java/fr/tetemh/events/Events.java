@@ -2,26 +2,43 @@ package fr.tetemh.events;
 
 import fr.tetemh.events.managers.EventsManager;
 import fr.tetemh.skycite.SkyCite;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
+
+@Data
 public class Events {
 
-    @Getter
     private final SkyCite plugin;
-
-    @Getter @Setter
     private EventsManager eventsManager;
+    private YamlConfiguration eventsConfig;
 
     public Events(SkyCite plugin) {
         this.plugin = plugin;
     }
 
     public void onEnable() {
-    this.setEventsManager(new EventsManager(this.getPlugin()));
+
+
+        // Config Files
+        try {
+            File eventsFile = new File(this.getPlugin().getDataFolder(), "events.yml");
+            this.setEventsConfig(YamlConfiguration.loadConfiguration(eventsFile));
+            this.getEventsConfig().save(eventsFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.setEventsManager(new EventsManager(this.getPlugin()));
     }
 
     public void onDisable() {
-
+        this.getEventsManager().getEvents().values().forEach(event -> {
+            event.disable();
+        });
     }
 }
