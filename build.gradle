@@ -43,7 +43,7 @@ dependencies {
     compileOnly 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
 
     //World Edit/Guard
-    compileOnly group: 'com.sk89q.worldedit', name: 'worldedit-bukkit', version: '7.3.5'
+    compileOnly group: 'com.sk89q.worldedit', name: 'worldedit-bukkit', version: '7.3.6'
     compileOnly group: 'com.sk89q.worldguard', name: 'worldguard-bukkit', version: '7.0.10'
 }
 

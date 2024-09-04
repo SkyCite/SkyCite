@@ -12,6 +12,7 @@ public class ChasseAuTresorBoardRunnable extends BukkitRunnable {
 
     private final SkyCite plugin;
     private final ChasseAuTresor cat;
+    private boolean start;
 
     public ChasseAuTresorBoardRunnable(SkyCite plugin, ChasseAuTresor cat) {
         this.plugin = plugin;
@@ -20,6 +21,11 @@ public class ChasseAuTresorBoardRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
+        if(!this.isStart()) this.setStart(true);
+        if(this.getCat().getChasseAuTresorRunnable().isCancelled()) {
+            this.setStart(false);
+            this.cancel();
+        }
         this.getPlugin().getPlayersManager().getPlayers().values().stream().filter(cPlayer -> cPlayer.isOnline() && cPlayer.isInEvent()).forEach(this::updateLine);
     }
 

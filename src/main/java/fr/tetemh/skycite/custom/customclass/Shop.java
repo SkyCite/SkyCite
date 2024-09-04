@@ -22,8 +22,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,28 +41,24 @@ public class Shop {
     private List<Trade> trades = new ArrayList<>();
     private InventoryManager inventoryManager;
 
-    public Shop(SkyCite plugin, String shopName) {
+    public Shop(SkyCite plugin, String shopName, Location location) {
         this.setPlugin(plugin);
 
         this.setName(shopName);
         this.setConstantName(Utils.normalizeString(shopName));
+        this.setLocation(location);
         this.setInventoryManager(new InventoryManager());
-    }
 
-    public void setLocation(float x, float y, float z, float yaw, float pitch) {
-        this.setLocation(new Location(Bukkit.getWorld("world"), x, y, z, yaw, pitch));
+        if(this.getPlugin().getConfig().getString("npcs." + this.getConstantName()) != null) {
+            this.setNpc(CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(this.getPlugin().getNpcConfig().getString("npcs." + this.getConstantName()))));
+        } else {
+            this.setNpc();
+            this.spawn();
+        }
     }
 
     /* DEBUT GESTION NPC */
     public void setNpc() {
-        // Verif si le npc existe pas deja
-        for (NPC npc : CitizensAPI.getNPCRegistry()) {
-            if (npc.getName().equals(this.getName())) {
-                this.setNpc(npc);
-                return;
-            }
-        }
-
         // Créer un nouveau NPC
         this.setNpc(CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, this.getName()));
     }
@@ -90,8 +88,12 @@ public class Shop {
     }
 
     public void disable() {
-        this.getNpc().despawn();
-        this.getNpc().destroy();
+        this.getPlugin().getConfig().set("npcs." + this.getConstantName(), this.getNpc().getUniqueId().toString());
+        try {
+            this.getPlugin().saveNpcConfig();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /* FIN GESTION NPC */
@@ -137,12 +139,6 @@ public class Shop {
             three.addAndGet(9);
 
             nbItem.incrementAndGet();
-        });
-    }
-
-    public void genTrades() {
-        this.getPlugin().getTradesConfig().getList("npcs.shops").forEach(shop -> {
-
         });
     }
 

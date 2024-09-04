@@ -1,6 +1,7 @@
 package fr.tetemh.events;
 
 import fr.tetemh.events.commands.EventCommand;
+import fr.tetemh.events.customclass.Event;
 import fr.tetemh.events.managers.EventsManager;
 import fr.tetemh.skycite.SkyCite;
 import lombok.Data;
@@ -39,8 +40,9 @@ public class Events {
     }
 
     public void onDisable() {
-        this.getEventsManager().getEvents().values().forEach(event -> {
-            event.disable();
+        this.getEventsManager().getEvents().values().forEach(e -> {
+            Event event = (Event) e;
+            event.stop();
         });
     }
 }

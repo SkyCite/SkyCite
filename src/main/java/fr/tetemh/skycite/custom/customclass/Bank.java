@@ -37,6 +37,7 @@ public class Bank {
 
     public void setNPC() {
         for (NPC npc : CitizensAPI.getNPCRegistry()) {
+            System.out.println(npc.getName());
             if (npc.getName().equals(this.getName())) {
                 this.setNpc(npc);
                 return;

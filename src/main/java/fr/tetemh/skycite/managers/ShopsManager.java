@@ -4,6 +4,8 @@ import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.custom.customclass.Shop;
 import fr.tetemh.skycite.custom.customclass.Trade;
 import lombok.Data;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -24,10 +26,7 @@ public class ShopsManager {
     public void init() {
 
         /*  SHOP MINEUR */
-        Shop mineur = new Shop(this.getPlugin(), "Mineur");
-        mineur.setLocation(0, 100, 0, 0, 0);
-        mineur.setNpc();
-        mineur.spawn();
+        Shop mineur = new Shop(this.getPlugin(), "Mineur", new Location(Bukkit.getWorld("world"), 0, 100, 0, 0, 0));
 
         mineur.getTrades().add(new Trade(Material.STONE, 1, 20));
         mineur.getTrades().add(new Trade(Material.STONE, 1, 20));
@@ -36,11 +35,18 @@ public class ShopsManager {
         this.getShops().put(mineur.getConstantName(), mineur);
 
         /*  SHOP FLEURISTE */
-        Shop fleuriste = new Shop(this.getPlugin(), "Fleuriste");
-        fleuriste.setLocation(2, 100, 0, 0, 0);
-        fleuriste.setNpc();
-        fleuriste.spawn();
+        Shop fleuriste = new Shop(this.getPlugin(), "Fleuriste", new Location(Bukkit.getWorld("world"), 2, 100, 0, 0, 0));
 
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
+        fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
         fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
         fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
         fleuriste.getTrades().add(new Trade(Material.STONE, 1, 20));
@@ -53,12 +59,7 @@ public class ShopsManager {
 
     public void disable() {
         this.shops.values().forEach(shop -> {
-//            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName() + ".name", shop.getName());
-//            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName() + ".constant_name", shop.getConstantName());
-//            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName() + ".location", shop.getLocation());
-            shop.getNpc().despawn();
-            this.getPlugin().getNpcConfig().set("npcs.shops." + shop.getConstantName(), shop);
-            this.getPlugin().saveConfig();
+            shop.getNpc().destroy();
         });
     }
 

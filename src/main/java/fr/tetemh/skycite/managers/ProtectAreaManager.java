@@ -5,6 +5,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.custom.customclass.ProtectArea;
 import lombok.Data;
+import net.kyori.adventure.text.Component;
 
 import java.util.HashMap;
 
@@ -28,6 +29,7 @@ public class ProtectAreaManager {
         spawnArea.getRegion().setFlag(Flags.PVP, StateFlag.State.DENY);
         spawnArea.getRegion().setFlag(Flags.RIDE, StateFlag.State.DENY);
         spawnArea.getRegion().setFlag(Flags.INTERACT, StateFlag.State.DENY);
+        spawnArea.getRegion().setFlag(Flags.DENY_MESSAGE, "§cVous ne pouvez pas faire cette action !");
 
         this.getAreas().put(spawnArea.getRegionName(), spawnArea);
     }

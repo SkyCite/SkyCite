@@ -6,7 +6,7 @@ authors: [ tetemh ]
 libraries:
     - com.zaxxer:HikariCP:4.0.3
     - org.mariadb.jdbc:mariadb-java-client:3.0.8
-depend: [Citizens]
+depend: [Citizens, WorldGuard]
 commands:
     init:
         description: Initialise le plugin de cité
@@ -24,5 +24,9 @@ commands:
     reloadnpc:
         description: Reload Citizen NPC
         permission: skycite.reloadnpc
+        permission-message: Non Non Non tu essaies de faire quoi là !
+    event:
+        description: Gestion des events
+        permission: skycite.event
         permission-message: Non Non Non tu essaies de faire quoi là !
 
