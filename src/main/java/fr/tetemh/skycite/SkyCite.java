@@ -1,5 +1,8 @@
 package fr.tetemh.skycite;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import fr.tetemh.events.Events;
 import fr.tetemh.fastinv.FastInvManager;
 import fr.tetemh.skycite.commands.DebugCommand;
@@ -7,6 +10,7 @@ import fr.tetemh.skycite.commands.InitCommand;
 import fr.tetemh.skycite.commands.MoneyCommand;
 import fr.tetemh.skycite.commands.ReloadNPCCommand;
 import fr.tetemh.skycite.custom.customclass.Bank;
+import fr.tetemh.skycite.events.NotAuthActionEvent;
 import fr.tetemh.skycite.events.OnCitizenStartEvent;
 import fr.tetemh.skycite.events.OnJoin;
 import fr.tetemh.skycite.events.OnQuit;
@@ -17,7 +21,10 @@ import fr.tetemh.skycite.managers.ShopsManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,11 +73,11 @@ public final class SkyCite extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Text Plugin ON
         Arrays.stream(enableText).forEach(l -> this.getLogger().info(l));
 
         SkyCite.instance = this;
-
-        // Text Plugin ON
+        WorldGuardPlugin wgPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
 
         // Config Files
         try {
@@ -87,7 +94,6 @@ public final class SkyCite extends JavaPlugin {
 
         // Define Managers
         this.setPlayersManager(new PlayersManager(this));
-        this.setBoardsManager(new BoardsManager(this));
         this.setShopsManager(new ShopsManager(this));
         this.setBank(new Bank(this));
 
@@ -104,6 +110,7 @@ public final class SkyCite extends JavaPlugin {
         // Calling Basic Event
         this.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new OnQuit(this), this);
+        this.getServer().getPluginManager().registerEvents(new NotAuthActionEvent(wgPlugin), this);
         this.getServer().getPluginManager().registerEvents(new OnCitizenStartEvent(this), this);
 
         // Event for Calling Custom Event
