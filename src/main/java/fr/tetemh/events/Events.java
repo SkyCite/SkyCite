@@ -1,5 +1,6 @@
 package fr.tetemh.events;
 
+import fr.tetemh.events.commands.EventCommand;
 import fr.tetemh.events.managers.EventsManager;
 import fr.tetemh.skycite.SkyCite;
 import lombok.Data;
@@ -23,7 +24,6 @@ public class Events {
 
     public void onEnable() {
 
-
         // Config Files
         try {
             File eventsFile = new File(this.getPlugin().getDataFolder(), "events.yml");
@@ -34,6 +34,8 @@ public class Events {
         }
 
         this.setEventsManager(new EventsManager(this.getPlugin()));
+
+        this.getPlugin().getCommand("event").setExecutor(new EventCommand(this.getPlugin()));
     }
 
     public void onDisable() {

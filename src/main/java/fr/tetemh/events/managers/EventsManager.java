@@ -1,22 +1,24 @@
 package fr.tetemh.events.managers;
 
 import fr.tetemh.events.customclass.Event;
+import fr.tetemh.events.events.ChasseAuTresor;
+import fr.tetemh.events.runnables.ChasseAuTresorRunnable;
 import fr.tetemh.skycite.SkyCite;
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.HashMap;
 
+@Data
 public class EventsManager {
 
     private final SkyCite plugin;
 
-    @Getter
-    private HashMap<String, Event> events = new HashMap<>();
+    private HashMap<String, Object> events = new HashMap<>();
 
     public EventsManager(SkyCite plugin) {
         this.plugin = plugin;
 
-        Event chasseAuTresor = new Event("Chasse Au Trésore");
+        ChasseAuTresor chasseAuTresor = new ChasseAuTresor(this.getPlugin());
         this.getEvents().put(chasseAuTresor.getConstantName(), chasseAuTresor);
     }
 }

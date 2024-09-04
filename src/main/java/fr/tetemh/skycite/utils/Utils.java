@@ -8,9 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class Utils {
@@ -60,4 +65,26 @@ public class Utils {
     public static ItemBuilder getBorderItem() {
         return new ItemBuilder(Material.WHITE_STAINED_GLASS_PANE).name(" ");
     }
+
+    public static String convertSecondToFormat(int secondes) {
+        int hours = secondes / 3600;
+        int minutes = (secondes % 3600) / 60;
+        int seconds = secondes % 60;
+
+        // Affichage en format hh:mm:ss
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public static void fillInventoryWithRandomItems(Inventory inventory, List<ItemStack> items) {
+        List<Integer> slots = new ArrayList<>();
+        for (int i = 0; i < inventory.getSize(); i++) slots.add(i);
+        Collections.shuffle(slots);
+        for (ItemStack item : items) {
+            if (!slots.isEmpty()) {
+                int slot = slots.removeFirst();
+                inventory.setItem(slot, item);
+            }
+        }
+    }
+
 }

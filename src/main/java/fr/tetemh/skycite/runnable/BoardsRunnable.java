@@ -18,16 +18,12 @@ public class BoardsRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        this.getPlugin().getBoardsManager().getBoards().forEach((uuid, board) -> {
-            CPlayer cPlayer = this.getPlugin().getPlayersManager().getPlayers().get(uuid);
-            this.updateLine(board, cPlayer);
-
-        });
+        this.getPlugin().getPlayersManager().getPlayers().values().stream().filter(cPlayer -> cPlayer.isOnline() && !cPlayer.isInEvent()).forEach(this::updateLine);
     }
 
-    private void updateLine(FastBoard board, CPlayer cPlayer) {
-        board.updateTitle(Component.text("SkyCite"));
-        board.updateLines(
+    private void updateLine(CPlayer cPlayer) {
+        cPlayer.getFastBoard().updateTitle(Component.text("SkyCite"));
+        cPlayer.getFastBoard().updateLines(
                 Component.text(""),
                 Component.text("Money : " + cPlayer.getMoney()),
                 Component.text("")
