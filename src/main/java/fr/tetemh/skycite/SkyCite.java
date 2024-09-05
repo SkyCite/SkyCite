@@ -1,17 +1,14 @@
 package fr.tetemh.skycite;
 
+import de.oliver.fancynpcs.api.FancyNpcsPlugin;
 import fr.tetemh.events.Events;
 import fr.tetemh.fastinv.FastInvManager;
 import fr.tetemh.skycite.commands.DebugCommand;
-import fr.tetemh.skycite.commands.InitCommand;
 import fr.tetemh.skycite.commands.MoneyCommand;
-import fr.tetemh.skycite.commands.ReloadNPCCommand;
 import fr.tetemh.skycite.custom.customclass.Bank;
 import fr.tetemh.skycite.custom.customclass.Shop;
-import fr.tetemh.skycite.events.OnCitizenEvent;
 import fr.tetemh.skycite.events.OnJoin;
 import fr.tetemh.skycite.events.OnQuit;
-import fr.tetemh.skycite.events.shop.PlayerClickOnNPCEvent;
 import fr.tetemh.skycite.managers.BoardsManager;
 import fr.tetemh.skycite.managers.PlayersManager;
 import fr.tetemh.skycite.managers.ProtectAreaManager;
@@ -60,9 +57,6 @@ public final class SkyCite extends JavaPlugin {
 
     // Config File
     @Getter @Setter
-    private YamlConfiguration npcConfig;
-    private File npcFile;
-    @Getter @Setter
     private YamlConfiguration tradesConfig;
     private File tradesFile;
 
@@ -77,13 +71,10 @@ public final class SkyCite extends JavaPlugin {
 
         SkyCite.instance = this;
 
+        FancyNpcsPlugin.get().getNpcManager().saveNpcs(false);
         // Config Files
         try {
             saveDefaultConfig();
-
-            npcFile = new File(this.getDataFolder(), "npc.yml");
-            this.setNpcConfig(YamlConfiguration.loadConfiguration(npcFile));
-            this.saveNpcConfig();
 
             tradesFile = new File(this.getDataFolder(), "trades.yml");
             this.setTradesConfig(YamlConfiguration.loadConfiguration(tradesFile));
@@ -96,33 +87,28 @@ public final class SkyCite extends JavaPlugin {
         this.setPlayersManager(new PlayersManager(this));
         this.setShopsManager(new ShopsManager(this));
         this.setBank(new Bank(this));
-        this.setProtectAreaManager(new ProtectAreaManager(this));
+//        this.setProtectAreaManager(new ProtectAreaManager(this));
 
         // Register FastInv Event
+
         FastInvManager.register(this);
 
         // Define Command
-        this.getCommand("init").setExecutor(new InitCommand(this));
         this.getCommand("money").setExecutor(new MoneyCommand(this));
-        this.getCommand("reloadnpc").setExecutor(new ReloadNPCCommand(this));
         this.getCommand("debug").setExecutor(new DebugCommand(this));
 
 
         // Calling Basic Event
         this.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new OnQuit(this), this);
-        this.getServer().getPluginManager().registerEvents(new OnCitizenEvent(this), this);
-
-        // Event for Calling Custom Event
-//        this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEntityEvent(this), this);
 
         // Calling Custom Event
-        this.getServer().getPluginManager().registerEvents(new PlayerClickOnNPCEvent(this), this);
+//        this.getServer().getPluginManager().registerEvents(new PlayerClickOnNPCEvent(this), this);
 
 
 
         // Init Shop More simple for debug
-//        this.getShopsManager().init();
+        this.getShopsManager().init();
 
         this.setEvents(new Events(this));
         this.getEvents().onEnable();
@@ -138,10 +124,5 @@ public final class SkyCite extends JavaPlugin {
 
     private void saveTradesConfig() throws IOException {
         this.getTradesConfig().save(tradesFile);
-    }
-
-    public void saveNpcConfig() throws IOException {
-        this.saveConfig();
-        this.reloadConfig();
     }
 }

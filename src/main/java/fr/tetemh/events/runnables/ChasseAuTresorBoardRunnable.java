@@ -4,14 +4,17 @@ import fr.tetemh.events.events.ChasseAuTresor;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.custom.customclass.CPlayer;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.scheduler.BukkitRunnable;
 
-@Data
+@Getter
 public class ChasseAuTresorBoardRunnable extends BukkitRunnable {
 
     private final SkyCite plugin;
     private final ChasseAuTresor cat;
+    @Setter
     private boolean start;
 
     public ChasseAuTresorBoardRunnable(SkyCite plugin, ChasseAuTresor cat) {

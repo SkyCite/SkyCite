@@ -1,19 +1,18 @@
 package fr.tetemh.skycite.custom.customclass;
 
+import de.oliver.fancynpcs.api.FancyNpcsPlugin;
+import de.oliver.fancynpcs.api.Npc;
+import de.oliver.fancynpcs.api.NpcData;
+import de.oliver.fancynpcs.api.utils.SkinFetcher;
 import fr.tetemh.fastinv.FastInv;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.guis.bank.BankGui;
+import fr.tetemh.skycite.utils.Utils;
 import lombok.Data;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.trait.Gravity;
-import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.entity.NPC;
 
 import java.util.UUID;
 
@@ -22,58 +21,41 @@ public class Bank {
 
     private final SkyCite plugin;
     private final String name;
+    private final String constantName;
     private final Location location;
-    private NPC npc;
+    private Npc npc;
     private FastInv inventory;
 
 
     public Bank (SkyCite plugin) {
         this.plugin = plugin;
         this.name = "Banquier";
+        this.constantName = Utils.normalizeString(this.getName());
         this.location = new Location(Bukkit.getWorld("world"), 0, 100, 5);
 
         this.genInventory();
     }
 
-    public void setNPC() {
-        for (NPC npc : CitizensAPI.getNPCRegistry()) {
-            System.out.println(npc.getName());
-            if (npc.getName().equals(this.getName())) {
-                this.setNpc(npc);
-                return;
-            }
-        }
 
-        // Créer un nouveau NPC
-        this.setNpc(CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, this.getName()));
-    }
+    /* DEBUT GESTION NPC */
+    public void setNpc() {
+        NpcData data = new NpcData(this.getConstantName(), UUID.randomUUID(), this.getLocation());
+        SkinFetcher skin = new SkinFetcher("tetemhjpd");
+        data.setSkin(skin);
+        data.setDisplayName(this.getName());
 
-    public void spawn () {
-        if(this.getNpc().isSpawned()) return;
-        //Citizen Conf
-        this.getNpc().setFlyable(true);
-        this.getNpc().setUseMinecraftAI(false);
-        this.getNpc().setProtected(true);
-
-        //Set Skin
-        SkinTrait skinTrait = this.getNpc().getOrAddTrait(SkinTrait.class);
-        skinTrait.setSkinName("tetemhjpd");
-        this.getNpc().addTrait((Trait) skinTrait);
-
-        //Add Parametres
-        this.getNpc().getOrAddTrait(Gravity.class).toggle();
-        this.getNpc().data().set("npc_type", "bank");
-
-        // Spawn Entity
-        this.getNpc().spawn(this.getLocation());
-    }
-
-    private void genInventory() {
-        this.setInventory(new BankGui(this.getPlugin(), this));
+        this.setNpc(FancyNpcsPlugin.get().getNpcAdapter().apply(data));
+        FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
+        npc.create();
+        npc.spawnForAll();
     }
 
     public void disable() {
-        this.getNpc().despawn();
-        this.getNpc().destroy();
+    }
+
+    /* FIN GESTION NPC */
+
+    private void genInventory() {
+        this.setInventory(new BankGui(this.getPlugin(), this));
     }
 }

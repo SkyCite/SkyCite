@@ -1,28 +1,22 @@
 package fr.tetemh.skycite.custom.customclass;
 
+import de.oliver.fancynpcs.api.FancyNpcsPlugin;
+import de.oliver.fancynpcs.api.Npc;
+import de.oliver.fancynpcs.api.NpcData;
+import de.oliver.fancynpcs.api.utils.SkinFetcher;
 import fr.tetemh.fastinv.FastInv;
 import fr.tetemh.fastinv.ItemBuilder;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.managers.InventoryManager;
 import fr.tetemh.skycite.utils.Utils;
 import lombok.Data;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.trait.Gravity;
-import net.citizensnpcs.trait.SkinTrait;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +28,8 @@ public class Shop {
 
     private SkyCite plugin;
 
-    private NPC npc;
+//    private NPC npc;
+    private Npc npc;
     private String name;
     private String constantName;
     private Location location;
@@ -49,51 +44,31 @@ public class Shop {
         this.setLocation(location);
         this.setInventoryManager(new InventoryManager());
 
-        if(this.getPlugin().getConfig().getString("npcs." + this.getConstantName()) != null) {
-            this.setNpc(CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(this.getPlugin().getNpcConfig().getString("npcs." + this.getConstantName()))));
-        } else {
-            this.setNpc();
-            this.spawn();
-        }
+//        if(this.getPlugin().getConfig().getString("npcs." + this.getConstantName()) != null) {
+//            this.setNpc(CitizensAPI.getNPCRegistry().getByUniqueId(UUID.fromString(this.getPlugin().getNpcConfig().getString("npcs." + this.getConstantName()))));
+//        } else {
+//            this.setNpc();
+//            this.spawn();
+//        }
+        this.setNpc();
     }
 
     /* DEBUT GESTION NPC */
     public void setNpc() {
-        // Créer un nouveau NPC
-        this.setNpc(CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, this.getName()));
-    }
+        System.out.println("ok");
+        NpcData data = new NpcData(this.getConstantName(), UUID.randomUUID(), this.getLocation());
+        SkinFetcher skin = new SkinFetcher("tetemhjpd");
+        data.setSkin(skin);
+        data.setDisplayName(this.getName());
 
-    /**
-     * Permet de faire spawn le NPC pour tous les joueurs
-     */
-    public void spawn() {
-        if(this.getNpc().isSpawned()) return;
-        //Citizen Conf
-        this.getNpc().setFlyable(true);
-        this.getNpc().setUseMinecraftAI(false);
-        this.getNpc().setProtected(true);
-
-        //Set Skin
-        SkinTrait skinTrait = this.getNpc().getOrAddTrait(SkinTrait.class);
-        skinTrait.setSkinName("tetemhjpd");
-        this.getNpc().addTrait((Trait) skinTrait);
-
-        //Add Parametres
-        npc.getOrAddTrait(Gravity.class).toggle();
-        this.getNpc().data().set("npc_type", "shop");
-        this.getNpc().data().set("shop_name", this.getConstantName());
-
-        // Spawn Entity
-        this.getNpc().spawn(this.getLocation());
+        this.setNpc(FancyNpcsPlugin.get().getNpcAdapter().apply(data));
+        FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
+        npc.create();
+        npc.spawnForAll();
+        System.out.println(this.getNpc().getData().isSpawnEntity());
     }
 
     public void disable() {
-        this.getPlugin().getConfig().set("npcs." + this.getConstantName(), this.getNpc().getUniqueId().toString());
-        try {
-            this.getPlugin().saveNpcConfig();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /* FIN GESTION NPC */

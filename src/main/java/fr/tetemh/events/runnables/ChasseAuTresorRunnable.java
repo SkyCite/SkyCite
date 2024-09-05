@@ -6,6 +6,8 @@ import fr.tetemh.fastinv.ItemBuilder;
 import fr.tetemh.skycite.SkyCite;
 import fr.tetemh.skycite.utils.Utils;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -14,15 +16,19 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-@Data
+@Getter
 public class ChasseAuTresorRunnable extends BukkitRunnable {
 
     private final SkyCite plugin;
     private final ChasseAuTresor cat;
+    @Setter
     private int timeCounter = 0;
+    @Setter
     private int chestNumber = 0;
+    @Setter
     private CChest cChest;
 
+    @Setter
     private boolean start;
 
     public ChasseAuTresorRunnable(SkyCite plugin, ChasseAuTresor cat) {

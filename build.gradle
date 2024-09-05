@@ -15,8 +15,9 @@ repositories {
     mavenCentral()
 
     maven { url = 'https://jitpack.io' }
-    maven { url = 'https://maven.citizensnpcs.co/repo' }
+//    maven { url = 'https://maven.citizensnpcs.co/repo' }
     maven { url = 'https://maven.enginehub.org/repo/' }
+    maven { url = 'https://repo.fancyplugins.de/releases' }
 }
 
 
@@ -31,9 +32,11 @@ dependencies {
     compileOnly 'com.mojang:authlib:1.5.25'
 
     // Citizen
-    compileOnly('net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT') {
-        exclude group: '*', module: '*'
-    }
+//    compileOnly('net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT') {
+//        exclude group: '*', module: '*'
+//    }
+
+    compileOnly("de.oliver:FancyNpcs:2.2.2")
 
     // Fastboard
     implementation 'fr.mrmicky:fastboard:2.1.3'

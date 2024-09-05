@@ -59,7 +59,7 @@ public class ShopsManager {
 
     public void disable() {
         this.shops.values().forEach(shop -> {
-            shop.getNpc().destroy();
+            shop.getNpc().removeForAll();
         });
     }
 
